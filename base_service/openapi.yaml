@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: base Microservice
+  version: '1.0'
+paths:
+  /:
+    get:
+      summary: Health check
+      operationId: app.core.app_setup.hello
+      responses:
+        200:
+          description: Healthy
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /testing:
+    post:
+      summary: Add a test
+      operationId: app.api.endpoints.simple_check.send_data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - url
+              properties:
+                url:
+                  description: url
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonResponse'
+
+  /testing/{task_id}:
+    get:
+      summary: get data
+      operationId: app.api.endpoints.simple_check.get_data
+      parameters:
+      - name: task_id
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A JSON object containing posts information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    description: posts infromation
+                required:
+                  - code
+                  - message
+                  - data
+
+components:
+  schemas:
+    JsonResponse:
+      description: Jsonfied response.
+      type: object
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          description: Response content.
+          type: object
